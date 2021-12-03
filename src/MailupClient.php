@@ -23,7 +23,7 @@ class MailupClient {
          if( ($inClientId != "") && ($inClientSecret != "") && ($inCallbackUri != "") ) {
             $this->mailUp = new MailupClass($inClientId, $inClientSecret, $inCallbackUri);
          }
-      } catch (MailUpException $e) {
+      } catch (MailupException $e) {
          // DO NOTHING AT THE MOMENT
       }
    }
@@ -102,7 +102,7 @@ class MailupClient {
                   if( isset($result->IdList) ) {
                      $listId = $result->IdList;
                   }
-               } catch (MailUpException $e) {
+               } catch (MailupException $e) {
                   // DO NOTHING AT THE MOMENT
                }
             } else {
@@ -129,7 +129,7 @@ class MailupClient {
                   break;
                }
             }
-         } catch (MailUpException $e) {
+         } catch (MailupException $e) {
             // DO NOTHING AT THE MOMENT
          }
       }
@@ -147,7 +147,7 @@ class MailupClient {
             if( count($result->Items) > 0 ) {
                $itemID = $result->Items[0]->idRecipient;
             }
-         } catch (MailUpException $e) {
+         } catch (MailupException $e) {
             // DO NOTHING AT THE MOMENT
          }
       }
@@ -172,7 +172,7 @@ class MailupClient {
                   }
                }
             }
-         } catch (MailUpException $e) {
+         } catch (MailupException $e) {
             // DO NOTHING AT THE MOMENT
          }
       }
@@ -196,7 +196,7 @@ class MailupClient {
                   break;
                }
             }
-         } catch (MailUpException $e) {
+         } catch (MailupException $e) {
             // DO NOTHING AT THE MOMENT
          }
       }
@@ -231,7 +231,7 @@ class MailupClient {
          $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/" . $this->listId . "/Email/" . $emailId . "/Attachment/1";
          $result = $this->mailUp->callMethod($url, "POST", json_encode($attachReq), "JSON");
          $result = json_decode($result);
-      } catch (MailUpException $e) {
+      } catch (MailupException $e) {
          // DO NOTHING AT THE MOMENT
       }
    }
@@ -250,7 +250,7 @@ class MailupClient {
                return $emailId;
             }
          }
-      } catch (MailUpException $e) {
+      } catch (MailupException $e) {
          // DO NOTHING AT THE MOMENT
       }
       return false;
@@ -283,7 +283,7 @@ class MailupClient {
             }
             return $emailId;
          }
-      } catch (MailUpException $e) {
+      } catch (MailupException $e) {
          // DO NOTHING AT THE MOMENT
       }
       return false;
@@ -304,7 +304,7 @@ class MailupClient {
             }
          }
          return true;
-      } catch (MailUpException $e) {
+      } catch (MailupException $e) {
          // DO NOTHING AT THE MOMENT
       }
       return false;
@@ -330,7 +330,7 @@ class MailupClient {
          try {
             $result = $this->mailUp->callMethod($url, "POST", $postData, "JSON");
             return true;
-         } catch (MailUpException $e) {
+         } catch (MailupException $e) {
             // DO NOTHING AT THE MOMENT
          }
       }
@@ -360,7 +360,7 @@ class MailupClient {
                return MailupStatus::OK;
             }
             return MailupStatus::ERR_NOT_LOGGED_IN;
-         } catch ( MailUpException $e ) {
+         } catch ( MailupException $e ) {
             return MailupStatus::ERR_MAILUP_EXCEPTION;
          }
       }
@@ -424,7 +424,7 @@ class MailupClient {
                      return MailupStatus::ERR_LIST_NOT_CHANGED;
                   }
                }
-            } catch (MailUpException $e) {
+            } catch (MailupException $e) {
                return MailupStatus::ERR_MAILUP_EXCEPTION;
             }
          }
@@ -452,7 +452,7 @@ class MailupClient {
                   return MailupStatus::ERR_GETTING_DATA;
                }
                return MailupStatus::ERR_USERDATA_NOTFOUND;
-            } catch (MailUpException $e) {
+            } catch (MailupException $e) {
                return MailupStatus::ERR_MAILUP_EXCEPTION;
             }
          } else {
@@ -475,7 +475,7 @@ class MailupClient {
                   return $groupId;
                }
                return MailupStatus::ERR_CREATING_GROUPS;
-            } catch (MailUpException $e) {
+            } catch (MailupException $e) {
                return MailupStatus::ERR_MAILUP_EXCEPTION;
             }
          } else {
@@ -518,7 +518,7 @@ class MailupClient {
                   }
                }
                return MailupStatus::ERR_ADDING_USER;
-            } catch (MailUpException $e) {
+            } catch (MailupException $e) {
                return MailupStatus::ERR_MAILUP_EXCEPTION;
             }
          } else {
@@ -543,7 +543,7 @@ class MailupClient {
             } else {
                return MailupStatus::ERR_UNKNOW_LIST;
             }
-         } catch (MailUpException $ex) {
+         } catch (MailupException $ex) {
             return MailupStatus::ERR_MAILUP_EXCEPTION;
          }
       }

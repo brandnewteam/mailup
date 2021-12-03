@@ -2,7 +2,7 @@
 
 namespace Caereservices\Mailup;
 
-class MailUpException extends \Exception {
+class MailupException extends \Exception {
 
     var $statusCode;
 

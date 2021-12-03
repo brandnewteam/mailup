@@ -133,7 +133,7 @@ namespace Caereservices\Mailup;
             $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             curl_close($curl);
 
-            if ($code != 200 && $code != 302) throw new MailUpException($code, "Authorization error");
+            if ($code != 200 && $code != 302) throw new MailupException($code, "Authorization error");
 
             $result = json_decode($result);
 
@@ -169,7 +169,7 @@ namespace Caereservices\Mailup;
             $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             curl_close($curl);
 
-            if ($code != 200 && $code != 302) throw new MailUpException($code, "Authorization error");
+            if ($code != 200 && $code != 302) throw new MailupException($code, "Authorization error");
 
             $result = json_decode($result);
 
@@ -197,7 +197,7 @@ namespace Caereservices\Mailup;
             $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             curl_close($curl);
 
-            if ($code != 200 && $code != 302) throw new MailUpException($code, "Authorization error");
+            if ($code != 200 && $code != 302) throw new MailupException($code, "Authorization error");
 
             $result = json_decode($result);
 
@@ -246,8 +246,8 @@ namespace Caereservices\Mailup;
             if ($code == 401 && $refresh == true) {
                 $this->refreshAccessToken();
                 return $this->callMethod($url, $verb, $body, $contentType, false);
-            } else if ($code == 401 && $refresh == false) throw new MailUpException($code, "Authorization error");
-             else if ($code != 200 && $code != 302) throw new MailUpException($code, "Unknown error");
+            } else if ($code == 401 && $refresh == false) throw new MailupException($code, "Authorization error");
+             else if ($code != 200 && $code != 302) throw new MailupException($code, "Unknown error");
 
             return $result;
         }
