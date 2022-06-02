@@ -310,7 +310,7 @@ class MailupClient {
       return false;
    }
 
-   protected function send_mail($emailId = 0, $groupName = "", $userMail) {
+   protected function send_mail($userMail, $emailId = 0, $groupName = "") {
       $postData = null;
       $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/" . $this->listId . "/Email/" . $emailId . "/Send";
       if( $groupName != "" ) {
@@ -550,8 +550,12 @@ class MailupClient {
       return MailupStatus::ERR_NOT_LOGGED_IN;
    }
 
-   function sendFromTemplate($templateId = 0, $groupName = "", $userMail, $attach = "") {
+   function sendFromTemplate($templateId = 0, $groupName = "", $userMail = "", $attach = "") {
       if( $this->clientLogged ) {
+         if ($userMail === "") {
+            return MailupStatus::ERR_GETTING_USERDATA;
+         }
+
          if( $templateId != 0 ) {
             $attachData = $this->get_attachment($attach);
             if( !is_array($attachData) ) {
@@ -559,7 +563,7 @@ class MailupClient {
             }
             $result = $this->create_mail_from_template($templateId, $attachData);
             if( (gettype($result) == "integer") && (intval($result) != 0) ) {
-               if( $this->send_mail($result, $groupName, $userMail) ) {
+               if( $this->send_mail($userMail, $result, $groupName) ) {
                   return MailupStatus::MESSAGE_SENDED;
                } else {
                   return MailupStatus::ERR_MESSAGE_NOT_SENDED;
@@ -574,8 +578,12 @@ class MailupClient {
       return MailupStatus::ERR_NOT_LOGGED_IN;
    }
 
-   function sendMessage($subject = "", $message = "", $groupName = "", $userName, $attach = "") {
+   function sendMessage($subject = "", $message = "", $groupName = "", $userName = "", $attach = "") {
       if( $this->clientLogged ) {
+         if ($userName === "") {
+            return MailupStatus::ERR_GETTING_USERDATA;
+         }
+
          if( $subject != "" && $message != "" ) {
             $attachData = $this->get_attachment($attach);
             if( !is_array($attachData) ) {
@@ -583,7 +591,7 @@ class MailupClient {
             }
             $result = $this->create_mail_from_message($subject, $message, $attachData);
             if( (gettype($result) == "integer") && (intval($result) != 0) ) {
-               if( $this->send_mail($result, $groupName, $userName) ) {
+               if( $this->send_mail($userName, $result, $groupName) ) {
                   return MailupStatus::MESSAGE_SENDED;
                } else {
                   return MailupStatus::ERR_MESSAGE_NOT_SENDED;
