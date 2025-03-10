@@ -2,22 +2,24 @@
 
 namespace Caereservices\Mailup;
 
-class MailupException extends \Exception {
+class MailupException extends \Exception
+{
 
     var $statusCode;
 
-    function __construct($inStatusCode, $inMessage) {
+    function __construct($inStatusCode, $inMessage)
+    {
         parent::__construct($inMessage);
         $this->statusCode = $inStatusCode;
     }
 
-    function getStatusCode() {
+    function getStatusCode()
+    {
         return $this->statusCode;
     }
 
-    function setStatusCode($inStatusCode) {
+    function setStatusCode($inStatusCode)
+    {
         $this->statusCode = $inStatusCode;
     }
 }
-
-?>

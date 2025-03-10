@@ -2,7 +2,8 @@
 
 namespace Caereservices\Mailup;
 
-class MailupStatus {
+class MailupStatus
+{
    const OK = -99;
    const MESSAGE_SENDED = -1;
    const ERR_GETTING_GROUPS = -10;
