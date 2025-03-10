@@ -146,7 +146,7 @@ class MailupClient
       $itemID = -1;
       if ($mail != "" && $this->listId != -1) {
          try {
-            $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/" . $this->listId . "/Recipients/Subscribed?filterby=\"Email.Contains('" . $mail . "')\"";
+            $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/" . $this->listId . "/Recipients/Subscribed?filterby=\"Email=='" . $mail . "'\"";
             $result = $this->mailUp->callMethod($url, "GET", null, "JSON");
             if ($result === false) return $itemID;
             $result = json_decode($result);
