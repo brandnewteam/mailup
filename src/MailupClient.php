@@ -450,6 +450,38 @@ class MailupClient
       return MailupStatus::ERR_NOT_LOGGED_IN;
    }
 
+
+   function getRecipientInfo($mail = "", $listName = "")
+   {
+      if ($this->clientLogged) {
+         if ($listName != "") {
+            try {
+               $listId = $this->get_list_id($listName);
+               if ($listId != -1) {
+                  $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/" . $listId . "/Recipients/EmailOptins" . "?filterBy=\"Email=='{$mail}'\"";
+                  $result = $this->mailUp->callMethod($url, "GET", null, "JSON");
+                  if ($result === false) {
+                     return MailupStatus::ERR_GETTING_DATA;
+                  }
+
+                  $response = json_decode($result);
+
+                  if ($response->Items && $response->Items[0]) {
+                     return $response->Items[0];
+                  } else {
+                     return false;
+                  }
+               } else {
+                  return false;
+               }
+            } catch (MailupException $e) {
+               return false;
+            }
+         }
+         return false;
+      }
+      return false;
+   }
    function delUserFromGroup($mail = "", $groupName = "")
    {
       if ($this->clientLogged) {
@@ -505,6 +537,42 @@ class MailupClient
       }
    }
 
+   function addUserToList($userData = [], $listName = "", $confirmEmail = false)
+   {
+      if ($this->clientLogged) {
+         if (is_array($userData) && (count($userData) > 0) && ($listName != "")) {
+            try {
+               $listId = -1;
+               if (intval($listName) > 0) {
+                  $listId = intval($listName);
+               } else {
+                  $listId = $this->get_list_id($listName);
+                  if ($listId == -1) {
+                     return MailupStatus::ERR_LIST_NOT_FOUND;
+                  }
+               }
+               if ($listId != -1) {
+                  $recipientRequest = $this->makeRecipientsRequest($userData, "[]");
+                  if ($recipientRequest != "") {
+                     $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/{$listId}/Recipient?ConfirmEmail=" . $confirmEmail;
+                     $result = $this->mailUp->callMethod($url, "POST", $recipientRequest, "JSON");
+                     if ($result === false) return MailupStatus::ERR_INVALID_USERDATA;
+                     return MailupStatus::OK;
+                  }
+                  return MailupStatus::ERR_INVALID_USERDATA;
+               }
+               return MailupStatus::ERR_ADDING_USER;
+            } catch (MailupException $e) {
+               return MailupStatus::ERR_MAILUP_EXCEPTION;
+            }
+         } else {
+            return MailupStatus::ERR_INVALID_PARAMETER;
+         }
+      } else {
+         return MailupStatus::ERR_NOT_LOGGED_IN;
+      }
+   }
+
    function addUserToGroup($userData = [], $groupName = "")
    {
       if ($this->clientLogged) {
@@ -529,7 +597,7 @@ class MailupClient
                      if ($result === false) return MailupStatus::ERR_GETTING_FIELDS;
                      $recipientRequest = $this->makeRecipientsRequest($userData, $result);
                      if ($recipientRequest != "") {
-                        $url = $this->mailUp->getConsoleEndpoint() . "/Console/Group/" . $groupId . "/Recipient";
+                        $url = $this->mailUp->getConsoleEndpoint() . "/Console/Group/" . $groupId . "/Recipient?confirmSubscription=true";
                         $result = $this->mailUp->callMethod($url, "POST", $recipientRequest, "JSON");
                         if ($result === false) return MailupStatus::ERR_INVALID_USERDATA;
                         return MailupStatus::OK;
