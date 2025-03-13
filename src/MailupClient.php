@@ -552,14 +552,15 @@ class MailupClient
                         }
                     }
                     if ($listId != -1) {
-                        $recipientRequest = $this->makeRecipientsRequest($userData, "[]");
-                        if ($recipientRequest != "") {
-                            $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/{$listId}/Recipient?ConfirmEmail=" . $confirmEmail;
-                            $result = $this->mailUp->callMethod($url, "POST", $recipientRequest, "JSON");
-                            if ($result === false) return MailupStatus::ERR_INVALID_USERDATA;
-                            return MailupStatus::OK;
+                        $recipientRequest = json_encode([
+                            "Email" => $userData["mail"],
+                        ]);
+                        $url = $this->mailUp->getConsoleEndpoint() . "/Console/List/{$listId}/Recipient?ConfirmEmail=" . $confirmEmail;
+                        $result = $this->mailUp->callMethod($url, "POST", $recipientRequest, "JSON");
+                        if ($result === false) {
+                            return MailupStatus::ERR_INVALID_USERDATA;
                         }
-                        return MailupStatus::ERR_INVALID_USERDATA;
+                        return MailupStatus::OK;
                     }
                     return MailupStatus::ERR_ADDING_USER;
                 } catch (MailupException $e) {
